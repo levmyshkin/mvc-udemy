@@ -12,6 +12,12 @@ class Router {
   protected $routes = [];
 
   /**
+   * Parameters from the matched route.
+   * @var array
+   */
+  protected $params = [];
+
+  /**
    * Add a route to the routing table
    *
    * @param string $route The route URL
@@ -30,5 +36,45 @@ class Router {
    */
   public function getRoutes() {
     return $this->routes;
+  }
+
+  /**
+   * Get the currently matched parameters.
+   *
+   * @return array
+   */
+  public function getParams() {
+    return $this->params;
+  }
+
+  /**
+   * Match the route to the routes in the routing table, setting the $params
+   * property if a route is found.
+   *
+   * @param string $url The routes URL
+   *
+   * @return boolean TRUE if a match found, FALSE otherwise
+   */
+  public function match($url) {
+
+    // Match to the fixed URL format /controller/action.
+    $reg_exp = '/^(?P<controller>[a-z-]+)\/(?P<action>[a-z-]+)$/';
+
+    if (preg_match($reg_exp, $url, $matches)) {
+      // Get named capture group values.
+
+      $params = [];
+
+      foreach ($matches as $key => $match) {
+        if (is_string($key)) {
+          $params[$key] = $match;
+        }
+      }
+
+      $this->params = $params;
+      return TRUE;
+    }
+
+    return FALSE;
   }
 }
