@@ -5,28 +5,30 @@
  */
 
 /**
+ * Autoloader
+ */
+function my_autoload($class) {
+  $root = dirname(__DIR__); // get the parent directory.
+  $file = $root . '/' . str_replace('\\', '/', $class) . '.php';
+  if (is_readable($file)) {
+    require $root . '/' . str_replace('\\', '/', $class) . '.php';
+  }
+}
+
+spl_autoload_register('my_autoload');
+
+
+
+/**
  * Routing
  */
-require '../Core/Router.php';
 
-$router = new Router();
+$router = new Core\Router();
 
 // Add the routes.
 $router->add('', ['controller' => 'Home', 'action' => 'index']);
-$router->add('posts', ['controller' => 'Posts', 'action' => 'index']);
-$router->add('{conroller}/{action}');
-$router->add('admin/{action}/{conroller}');
+$router->add('{controller}/{action}');
+$router->add('{controller}/{id:\d+}/{action}');
 
-// Match the requested route.
-$url = $_SERVER['QUERY_STRING'];
+$router->dispatch($_SERVER['QUERY_STRING']);
 
-if ($router->match($url)) {
-  print '<pre>';
-  print htmlspecialchars(print_r($router->getRoutes(), true));
-  print '</pre>';
-
-  var_dump($router->getParams());
-}
-else {
-  print 'No route found for URL ' . $url;
-}
