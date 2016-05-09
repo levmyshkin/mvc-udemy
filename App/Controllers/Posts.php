@@ -5,7 +5,7 @@ namespace App\Controllers;
 /**
  * Posts controller
  */
-class Posts {
+class Posts extends \Core\Controller {
   /**
    * Show the index page.
    *
@@ -22,5 +22,14 @@ class Posts {
    */
   public function addNew() {
     print 'Hello from the addNew action in the Posts controller';
+  }
+
+  /**
+   * Shoe the edit page.
+   *
+   * @return void
+   */
+  public function edit() {
+    print 'Hello from the edit action in the Posts controller!';
   }
 }

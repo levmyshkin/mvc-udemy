@@ -96,13 +96,15 @@ class Router {
    * @return void
    */
   public function dispatch($url) {
+    $url = $this->removeQueryStringVariables($url);
+
     if ($this->match($url)) {
       $controller = $this->params['controller'];
       $controller = $this->convertToStudlyCaps($controller);
       $controller = "App\Controllers\\$controller";
 
       if (class_exists($controller)) {
-        $controller_object = new $controller();
+        $controller_object = new $controller($this->params);
 
         $action = $this->params['action'];
         $action = $this->convertToCamelCase($action);
@@ -117,6 +119,9 @@ class Router {
       else {
         print 'Controller class ' . $controller . ' not found';
       }
+    }
+    else {
+      print 'No route matched.';
     }
   }
 
@@ -142,5 +147,29 @@ class Router {
    */
   protected function convertToCamelCase($string) {
     return lcfirst($this->convertToStudlyCaps($string));
+  }
+
+  /**
+   * A URL of the format localhost/?page (one variable name, no value) won't
+   * work however. (NB. The .htaccess file converts the first ? to a & when
+   * it's passed through to the $_SERVER variable).
+   *
+   * @param string $url The full URL
+   *
+   * @return string The URL the query string variables removed
+   */
+  protected function removeQueryStringVariables($url) {
+    if ($url != '') {
+      $parts = explode('&', $url, 2);
+
+      if (strpos($parts[0], '=') === FALSE) {
+        $url = $parts[0];
+      }
+      else {
+        $url = '';
+      }
+    }
+
+    return $url;
   }
 }
