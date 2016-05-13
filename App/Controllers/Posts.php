@@ -11,7 +11,7 @@ class Posts extends \Core\Controller {
    *
    * @return void
    */
-  public function index() {
+  public function indexAction() {
     print 'Hello from the index action in the Posts controller';
   }
 
@@ -20,7 +20,7 @@ class Posts extends \Core\Controller {
    *
    * @return void
    */
-  public function addNew() {
+  public function addNewAction() {
     print 'Hello from the addNew action in the Posts controller';
   }
 
@@ -29,7 +29,7 @@ class Posts extends \Core\Controller {
    *
    * @return void
    */
-  public function edit() {
+  public function editAction() {
     print 'Hello from the edit action in the Posts controller!';
   }
 }
