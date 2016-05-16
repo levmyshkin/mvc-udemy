@@ -5,6 +5,12 @@
  */
 
 /**
+ * Twig
+ */
+require_once dirname(__DIR__) . '/vendor/Twig/lib/Twig/Autoloader.php';
+Twig_Autoloader::register();
+
+/**
  * Autoloader
  */
 function my_autoload($class) {
