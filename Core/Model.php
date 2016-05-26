@@ -3,6 +3,7 @@
 namespace Core;
 
 use PDO;
+use App\Config;
 
 /**
  * Base model.
@@ -15,14 +16,13 @@ abstract class Model {
     static $db = NULL;
 
     if ($db === NULL) {
-      $host = 'localhost';
-      $dbname = 'framework';
-      $username = 'root';
-      $password = '';
-
       try {
-        $db = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8",
-          $username, $password);
+        $dsn = 'mysql:host=' . Config::DB_HOST . ';dbname=' .
+          Config::DB_NAME . ';charset=utf8';
+        $db = new PDO($dsn, Config::DB_USER, Config::DB_PASSWORD);
+
+        // Trhow an Exception when an error occurs.
+        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         return $db;
       }

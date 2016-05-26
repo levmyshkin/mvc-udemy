@@ -114,6 +114,7 @@ class Router {
         }
         else {
           print 'method ' . $action . ' (in controller ' . $controller . ' not found.';
+          throw new \Exception('Method ' . $action . ' (in controller ' . $controller . ')');
         }
       }
       else {
