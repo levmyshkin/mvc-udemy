@@ -21,7 +21,7 @@ class View {
       require $file;
     }
     else {
-      print $file . ' not found';
+      throw new \Exception($file . ' not found');
     }
   }
 

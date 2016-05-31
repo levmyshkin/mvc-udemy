@@ -20,11 +20,31 @@ class Error {
    * Exception handler.
    */
   public static function exceptionHandler($exception) {
-    print '<h1>Fatal error</h1>';
-    print '<p>Uncaught exception: "' . get_class($exception) . '"</p>';
-    print '<p>Message: "' . $exception->getMessage() . '"</p>';
-    print '<p>Stack trace:<pre>' . $exception->getTraceAsString() . '</pre>';
-    print '<p>Thrown in "' . $exception->getFile() . '" on line' .
-      $exception->getLine() . '</p>';
+    $code = $exception->getCode();
+    if ($code != 404) {
+      $code = 500;
+    }
+    http_response_code($code);
+
+    if (\App\Config::SHOW_ERRORS) {
+      print '<h1>Fatal error</h1>';
+      print '<p>Uncaught exception: "' . get_class($exception) . '"</p>';
+      print '<p>Message: "' . $exception->getMessage() . '"</p>';
+      print '<p>Stack trace:<pre>' . $exception->getTraceAsString() . '</pre>';
+      print '<p>Thrown in "' . $exception->getFile() . '" on line' .
+        $exception->getLine() . '</p>';
+    }
+    else {
+      $log = dirname(__DIR__) . '/logs/' . date('Y-m-d') . '.txt';
+      ini_set('error_log', $log);
+
+      $message = 'Uncaught $exception: "' . get_class($exception) . '"';
+      $message .= ' with message "' . $exception->getMessage() . '"';
+      $message .= '\nStack trace: ' . $exception->getTraceAsString();
+      $message .= '\nTrown in "' . $exception->getFile() . '" on line ' .
+        $exception->getLine();
+      error_log($message);
+      View::renderTemplate($code . '.html');
+    }
   }
 }

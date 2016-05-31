@@ -113,16 +113,16 @@ class Router {
           $controller_object->$action();
         }
         else {
-          print 'method ' . $action . ' (in controller ' . $controller . ' not found.';
-          throw new \Exception('Method ' . $action . ' (in controller ' . $controller . ')');
+          throw new \Exception('Method ' . $action . ' (in controller ' .
+            $controller . ') not found');
         }
       }
       else {
-        print 'Controller class ' . $controller . ' not found';
+        throw new \Exception('Controller class ' . $controller . ' not found');
       }
     }
     else {
-      print 'No route matched.';
+      throw new \Exception('No route matched.', 404);
     }
   }
 
